@@ -22,7 +22,9 @@ const AppTextInputWithLabel = ({
             <Text style={styles.labelText}>
                 {labelText}
             </Text>
-            <View style={[styles.inputContainer, { borderColor: validationError ? appColor.red : appColor.GRAY }]}>
+            <View style={[styles.inputContainer, {
+                borderColor: validationError ? appColor.red : appColor.GRAY, borderBottomWidth: validationError ? 1 : 3,
+            }]}>
                 <AppIcon
                     Type={IconType}
                     name={Iconname}
@@ -61,7 +63,6 @@ const styles = StyleSheet.create({
     inputContainer: {
         borderRadius: 10,
         borderWidth: 1,
-        borderBottomWidth: 3,
         marginTop: '2%',
         width: '100%',
         flexDirection: 'row',
