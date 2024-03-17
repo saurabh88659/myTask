@@ -31,14 +31,17 @@ const ImageListScreen = ({ navigation }) => {
         return formData;
     };
 
+
+
     //api for get Image
     const handleGetImageListData = async () => {
         setButtonLoding(true)
-        const formData = createFormData();
+        const formData = await createFormData();
         const res = await getImageListData(formData);
+        console.log("res of handleGetImageListData==", res.data)
         if (res.data.status == "success") {
-            setScrenLoading(false)
-            setButtonLoding(false)
+            setScrenLoading(false);
+            setButtonLoding(false);
             setImageList(prevData => [...prevData, ...res.data.images]);
             setOffset(offset + 1)
         } else {
@@ -46,6 +49,7 @@ const ImageListScreen = ({ navigation }) => {
             console.log("error", res)
         }
     };
+
 
     //component for render images
     const renderItem = ({ item }) => (
@@ -88,7 +92,6 @@ const ImageListScreen = ({ navigation }) => {
 
                         />
                     </View>
-
                     }
 
                 />
