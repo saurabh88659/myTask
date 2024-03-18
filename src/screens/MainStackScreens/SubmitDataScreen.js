@@ -11,7 +11,8 @@ import AppStatusBar from '../../components/AppStatusBar';
 
 const SubmitDataScreen = ({ navigation, route }) => {
     const image = route.params.image;
-    console.log(image);
+    const aspectRatio = route.params.aspectRatio
+
     const [firstName, setFirstName] = useState('');
     const [firstNameError, setFirstNameError] = useState('');
 
@@ -25,6 +26,9 @@ const SubmitDataScreen = ({ navigation, route }) => {
     const [phoneNumberError, setPhoneNumberError] = useState('');
     const [buttonLoading, setButtonLoading] = useState(false);
 
+
+
+    //validation function===
     const validateForm = () => {
         let isValid = true;
         const phoneRegex = /^[6-9]\d{9}$/;
@@ -99,7 +103,7 @@ const SubmitDataScreen = ({ navigation, route }) => {
             const formData = createFormData();
             const res = await SaveUserData(formData);
             if (res.data.status == "success") {
-                console.log("res data", res.data);
+                // console.log("res data", res.data);
                 setButtonLoading(false);
                 Toast.show(res.data.message, Toast.BOTTOM);
                 setFirstName('');
@@ -108,7 +112,7 @@ const SubmitDataScreen = ({ navigation, route }) => {
                 setPhoneNumber('')
 
             } else {
-                console.log("error", res);
+                // console.log("error", res);
                 setButtonLoading(false);
             }
         }
@@ -120,7 +124,7 @@ const SubmitDataScreen = ({ navigation, route }) => {
             <AppHeader navigation={navigation} title="DETAILS" />
             <View style={styles.contentContainer}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                    <View style={styles.imageContainer}>
+                    <View style={{ aspectRatio: aspectRatio }}>
                         <Image style={styles.image} source={{ uri: image }} />
                     </View>
                     <AppTextInputWithLabel
@@ -132,7 +136,7 @@ const SubmitDataScreen = ({ navigation, route }) => {
                         Iconsize={20}
                         Iconcolor={appColor.DARK_GRAY}
                         labelText="First name"
-                        style={styles.input}
+                        style={{ marginTop: 15 }}
                         validationError={firstNameError}
                         maxLength={25}
                     />
@@ -202,10 +206,7 @@ const styles = StyleSheet.create({
     scrollViewContent: {
         paddingBottom: 10,
     },
-    imageContainer: {
-        aspectRatio: 1,
-        marginVertical: 0,
-    },
+
     image: {
         flex: 1,
     },

@@ -1,24 +1,32 @@
-import { Image, StyleSheet, Text, View, } from 'react-native'
-import React from 'react'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { routes } from '../utils/routes';
 
-const RenderImageItem = ({ item }) => {
-    console.log("item", item)
+const RenderImageItem = ({ item, navigation }) => {
+    const [aspectRatio, setAspectRatio] = useState(1);
+
+    // to get aspectRatio
+    Image.getSize(item.xt_image, (width, height) => {
+        setAspectRatio(width / height);
+    });
     return (
-        <View style={styles.imageContainer}>
-            <Image resizeMode='contain' source={{ uri: item.xt_image }} style={styles.image} />
-        </View>
-    )
-}
+        <TouchableOpacity
+            onPress={() => navigation.navigate(routes.SUBMIT_DATA_SCREEN, { image: item.xt_image, aspectRatio })}
+            style={[styles.imageContainer, { aspectRatio: aspectRatio }]}>
+            <Image
+                resizeMode="contain"
+                source={{ uri: item.xt_image }}
+                style={styles.image}
+            />
+        </TouchableOpacity>
+    );
+};
 
 export default RenderImageItem;
 const styles = StyleSheet.create({
     imageContainer: {
         flex: 1,
-        aspectRatio: 1,
-        paddingHorizontal: 15
+        paddingHorizontal: 15,
     },
-    image: {
-        width: "100%",
-        height: "100%"
-    },
-})
+    image: { height: undefined, width: undefined, flex: 1 },
+});

@@ -1,104 +1,85 @@
-import { Image, ScrollView, StyleSheet, Text, View, FlatList, Button, TouchableOpacity, ActivityIndicator } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { getImageListData } from '../../network/APIs/apiRequest'
-import { routes } from '../../utils/routes';
+import { StyleSheet, View, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { getImageListData } from '../../network/APIs/apiRequest';
 import AppButton from '../../components/AppButton';
 import appColor from '../../utils/appColor';
 import AppHeader from '../../components/AppHeader';
 import AppStatusBar from '../../components/AppStatusBar';
 import Lottie from 'lottie-react-native';
-
-
+import RenderImageItem from '../../components/RenderImageItem';
 
 const ImageListScreen = ({ navigation }) => {
     const [imageList, setImageList] = useState([]);
-    const [offset, setOffset] = useState(0)
+    const [offset, setOffset] = useState(0);
     const [buttonLoading, setButtonLoding] = useState(false);
     const [screenLoading, setScrenLoading] = useState(true);
-
 
     useEffect(() => {
         handleGetImageListData();
     }, []);
 
-
     // formdata function
     const createFormData = () => {
         const formData = new FormData();
-        formData.append("user_id", "108");
-        formData.append("offset", offset);
-        formData.append("type", "popular");
+        formData.append('user_id', '108');
+        formData.append('offset', offset);
+        formData.append('type', 'popular');
         return formData;
     };
 
-
-
     //api for get Image
     const handleGetImageListData = async () => {
-        setButtonLoding(true)
+        setButtonLoding(true);
         const formData = await createFormData();
         const res = await getImageListData(formData);
-        console.log("res of handleGetImageListData==", res.data)
-        if (res.data.status == "success") {
+        // console.log("res of handleGetImageListData==", res.data)
+        if (res.data.status == 'success') {
             setScrenLoading(false);
             setButtonLoding(false);
             setImageList(prevData => [...prevData, ...res.data.images]);
-            setOffset(offset + 1)
+            setOffset(offset + 1);
         } else {
-            setButtonLoding(false)
-            console.log("error", res)
+            setButtonLoding(false);
+            // console.log("error", res)
         }
     };
-
-
-    //component for render images
-    const renderItem = ({ item }) => (
-        console.log(item.xt_image),
-        <TouchableOpacity onPress={() => navigation.navigate(routes.SUBMIT_DATA_SCREEN, { image: item.xt_image })} style={styles.imageContainer}>
-            <Image resizeMode='contain' source={{ uri: item.xt_image }} style={styles.image} />
-        </TouchableOpacity>
-    );
 
     return (
         <View style={styles.container}>
             <AppStatusBar />
             <AppHeader navigation={navigation} title="HOME" isBackButton={false} />
             {screenLoading ? (
-                <View style={{ backgroundColor: appColor.WHITE, flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <View style={styles.lottieContainer}>
                     <Lottie
                         source={require('../../assets/animations/loading.json')}
                         autoPlay
                         loop={true}
-                        style={{
-                            height: "25%",
-                            width: '60%',
-                        }}
+                        style={styles.lottieStyle}
                     />
                 </View>
             ) : (
                 <FlatList
                     data={imageList}
-                    renderItem={renderItem}
+                    renderItem={({ item }) => <RenderImageItem item={item} navigation={navigation} />}
                     keyExtractor={(item, index) => index.toString()}
-                    ListFooterComponent={<View style={{ width: '75%', alignSelf: 'center', paddingBottom: 20 }} >
-                        <AppButton
-                            loaderColor={appColor.WHITE}
-                            bgcolor={appColor.BLACK}
-                            title={"Click here to Loadmore..."}
-                            textStyle={{ color: appColor.WHITE, fontSize: 17 }}
-                            buttonLoader={buttonLoading}
-                            onPress={handleGetImageListData}
-                            ContainerStyle={{ height: 50 }}
-
-                        />
-                    </View>
+                    ListFooterComponent={
+                        <View style={styles.footer}>
+                            <AppButton
+                                loaderColor={appColor.WHITE}
+                                bgcolor={appColor.BLACK}
+                                title={'Click here to Loadmore...'}
+                                textStyle={{ color: appColor.WHITE, fontSize: 17 }}
+                                buttonLoader={buttonLoading}
+                                onPress={handleGetImageListData}
+                                ContainerStyle={{ height: 50 }}
+                            />
+                        </View>
                     }
-
                 />
             )}
         </View>
-    )
-}
+    );
+};
 
 export default ImageListScreen;
 
@@ -113,9 +94,20 @@ const styles = StyleSheet.create({
     imageContainer: {
         flex: 1,
         aspectRatio: 1,
-        paddingHorizontal: 15
+        paddingHorizontal: 15,
     },
     image: {
         flex: 1,
+    },
+    footer: { width: '75%', alignSelf: 'center', paddingBottom: 20 },
+    lottieContainer: {
+        backgroundColor: appColor.WHITE,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    lottieStyle: {
+        height: '25%',
+        width: '60%',
     },
 });
