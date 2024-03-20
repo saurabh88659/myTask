@@ -54,6 +54,7 @@ const AppTextInputWithLabel = ({
 const styles = StyleSheet.create({
     container: {
         height: 100,
+        //backgroundColor:'red'
     },
     labelText: {
         fontSize: 15,
@@ -67,6 +68,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
+        height:50
     },
     icon: {
         marginRight: 10,

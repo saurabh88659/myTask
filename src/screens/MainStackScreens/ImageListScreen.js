@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, SafeAreaView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { getImageListData } from '../../network/APIs/apiRequest';
 import AppButton from '../../components/AppButton';
@@ -7,6 +7,8 @@ import AppHeader from '../../components/AppHeader';
 import AppStatusBar from '../../components/AppStatusBar';
 import Lottie from 'lottie-react-native';
 import RenderImageItem from '../../components/RenderImageItem';
+import axios from 'axios';
+import { getAuthHeaders } from '../../network/commonServices';
 
 const ImageListScreen = ({ navigation }) => {
     const [imageList, setImageList] = useState([]);
@@ -16,6 +18,7 @@ const ImageListScreen = ({ navigation }) => {
 
     useEffect(() => {
         handleGetImageListData();
+        // dataarr();
     }, []);
 
     // formdata function
@@ -27,13 +30,17 @@ const ImageListScreen = ({ navigation }) => {
         return formData;
     };
 
+ 
+
     //api for get Image
     const handleGetImageListData = async () => {
+
         setButtonLoding(true);
         const formData = await createFormData();
         const res = await getImageListData(formData);
-        // console.log("res of handleGetImageListData==", res.data)
+         console.log("res of handleGetImageListData==", res?.data)
         if (res.data.status == 'success') {
+            
             setScrenLoading(false);
             setButtonLoding(false);
             setImageList(prevData => [...prevData, ...res.data.images]);
@@ -45,7 +52,7 @@ const ImageListScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <AppStatusBar />
             <AppHeader navigation={navigation} title="HOME" isBackButton={false} />
             {screenLoading ? (
@@ -77,7 +84,7 @@ const ImageListScreen = ({ navigation }) => {
                     }
                 />
             )}
-        </View>
+        </SafeAreaView>
     );
 };
 

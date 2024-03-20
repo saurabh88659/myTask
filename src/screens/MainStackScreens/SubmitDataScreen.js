@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, Image, StyleSheet, StatusBar } from 'react-native';
+import { View, ScrollView, Image, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
 import { SaveUserData } from '../../network/APIs/apiRequest';
 import AppButton from '../../components/AppButton';
 import { Icon } from '../../components/AppIcon';
@@ -119,7 +119,7 @@ const SubmitDataScreen = ({ navigation, route }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <AppStatusBar />
             <AppHeader navigation={navigation} title="DETAILS" />
             <View style={styles.contentContainer}>
@@ -189,7 +189,7 @@ const SubmitDataScreen = ({ navigation, route }) => {
                     />
                 </ScrollView>
             </View>
-        </View>
+        </SafeAreaView>
     );
 };
 
